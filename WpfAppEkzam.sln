@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30517.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp_TicTacToe", "WpfApp_TicTacToe\WpfApp_TicTacToe.csproj", "{E16DC65F-4D14-47A6-8AB4-B9A94282B4C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp_BarleyBreak", "WpfApp_BarleyBreak\WpfApp_BarleyBreak.csproj", "{C619D75B-2D9F-404D-A382-4C680DEF2C65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E16DC65F-4D14-47A6-8AB4-B9A94282B4C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E16DC65F-4D14-47A6-8AB4-B9A94282B4C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E16DC65F-4D14-47A6-8AB4-B9A94282B4C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E16DC65F-4D14-47A6-8AB4-B9A94282B4C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C619D75B-2D9F-404D-A382-4C680DEF2C65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C619D75B-2D9F-404D-A382-4C680DEF2C65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C619D75B-2D9F-404D-A382-4C680DEF2C65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C619D75B-2D9F-404D-A382-4C680DEF2C65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A920AB9E-213C-4E03-9835-7A969C4CD617}
+	EndGlobalSection
+EndGlobal

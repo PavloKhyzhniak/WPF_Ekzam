@@ -1,0 +1,15 @@
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\bin\Debug\WpfApp_TicTacToe.exe.config
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\bin\Debug\WpfApp_TicTacToe.exe
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\bin\Debug\WpfApp_TicTacToe.pdb
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe.csprojAssemblyReference.cache
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\MainWindow.g.cs
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\App.g.cs
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe_MarkupCompile.cache
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe_MarkupCompile.lref
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\MainWindow.baml
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe.g.resources
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe.Properties.Resources.resources
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe.csproj.GenerateResource.cache
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe.csproj.CoreCompileInputs.cache
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe.exe
+C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_TicTacToe\obj\Debug\WpfApp_TicTacToe.pdb
