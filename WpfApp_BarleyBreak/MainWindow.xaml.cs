@@ -252,7 +252,7 @@ namespace WpfApp_BarleyBreak
                 
                 //получение позиции
                 int current_pos = uniformGridGame.Children.IndexOf(button);
-                int current_posRow = current_pos / rows;
+                int current_posRow = current_pos / columns;
                 int current_posColumn = current_pos % columns;
 
                 int index = 0;
@@ -279,7 +279,7 @@ namespace WpfApp_BarleyBreak
                             //осуществляем обмен элементов
                             array[i][j] = index;//запишем номер элемента в новую позицию
                             array[current_posRow][current_posColumn] = 0;//в старой позиции затираем его размещение
-                            new_pos = i * rows + j;//готовим новую позицию
+                            new_pos = i * columns + j;//готовим новую позицию
 
                             //установим новую позицию элементу
                             if(new_pos>current_pos)
@@ -288,7 +288,7 @@ namespace WpfApp_BarleyBreak
 
                                 uniformGridGame.Children.RemoveAt(new_pos);
                                 uniformGridGame.Children.RemoveAt(current_pos);
-                                uniformGridGame.Children.Insert(current_pos, new Button() { Visibility = Visibility.Hidden, Tag = 0 });
+                                uniformGridGame.Children.Insert(current_pos, CreateLastPiece());
                                 uniformGridGame.Children.Insert(new_pos, button);
                             }
                             else
@@ -298,7 +298,7 @@ namespace WpfApp_BarleyBreak
                                 uniformGridGame.Children.RemoveAt(current_pos);
                                 uniformGridGame.Children.RemoveAt(new_pos);
                                 uniformGridGame.Children.Insert(new_pos, button);
-                                uniformGridGame.Children.Insert(current_pos, new Button() { Visibility = Visibility.Hidden, Tag = 0 });
+                                uniformGridGame.Children.Insert(current_pos, CreateLastPiece());
                             }
 
                             //проверим размещение элементов на игровом поле - а вдруг уже победа?
@@ -331,14 +331,19 @@ namespace WpfApp_BarleyBreak
 
             string scorefilename = ".\\highscore.txt";
             FileInfo info = new FileInfo(scorefilename);
+            FileStream filestream = null;
             if (!info.Exists)
-                File.Create(scorefilename);
+            {
+                filestream = File.Create(scorefilename);
+            }
+            else
+                filestream = File.Open(scorefilename,FileMode.Open);
             info = null;
 
             List<playerScore> players = new List<playerScore>();
 
             //Read High Score Table From File
-            using (StreamReader reader = new StreamReader(scorefilename))
+            using (StreamReader reader = new StreamReader(filestream))
             {
                 string currentLine;
                 while ((currentLine = reader.ReadLine()) != null)
@@ -363,30 +368,15 @@ namespace WpfApp_BarleyBreak
                 }
             }
 
+            filestream.Close();
+
             //Add New Player in High Score Table
             if(newPlayer!=null)
                 players.Add(newPlayer);
 
             //Sorted Score By Ascending
             var playersSorted = players.OrderBy(p => p.Score);
-
-            //            //Insert New Player in High Score Table
-            //            int index = 0;
-            //            foreach (var score in players)
-            //            {
-            //                if (score.Score > time)
-            //                {
-            //                    playerScore newPlayer = new playerScore()
-            //                    {
-            //                        Score = time,
-            //                        Name = PlayerName
-            //                    };
-            //                    players.Insert(index, newPlayer);
-            //                    break;
-            //                }
-            //                index++;
-            //            }
-
+                
             //Create High Score Table List
             int i = 0;
             foreach (var item in playersSorted)
@@ -429,9 +419,13 @@ namespace WpfApp_BarleyBreak
 
         private bool CheckCorrectBarleyBreak()
         {
+            int rows = uniformGridGame.Rows;
+            int columns = uniformGridGame.Columns;
+            int cnt = rows * columns;
+
             //проверка корректности размещения пятнашек - номера по порядку от верхнего левого к нижнему правому игровому полю
-            for (int i = 0; i < 15; i++)
-                if (array[i / 4][i % 4] != i + 1)
+            for (int i = 0; i < cnt - 1; i++)
+                if (array[i / columns][i % columns] != i + 1)
                     return false;
 
             timer_game.Stop();
@@ -441,7 +435,8 @@ namespace WpfApp_BarleyBreak
 
         private void ShuffleSafe_Barley_Break(int count)
         {
-            if (uniformGridGame.Children.Count != 16)
+            int cnt = uniformGridGame.Rows * uniformGridGame.Columns;
+            if (uniformGridGame.Children.Count != cnt)
                 return;
 
             int rows = uniformGridGame.Rows;
@@ -450,8 +445,8 @@ namespace WpfApp_BarleyBreak
             Random rand = new Random();
             for (int k = 0; k < count; k++)
             {
-                int current_pos = rand.Next(16);
-                int current_posRow = current_pos / rows;
+                int current_pos = rand.Next(cnt);
+                int current_posRow = current_pos / columns;
                 int current_posColumn = current_pos % columns;
 
                 var button = uniformGridGame.Children[current_pos];
@@ -460,8 +455,8 @@ namespace WpfApp_BarleyBreak
     
                 int new_pos;
     
-                for (int i = 0; i < 4; i++)
-                    for (int j = 0; j < 4; j++)
+                for (int i = 0; i < rows; i++)
+                    for (int j = 0; j < columns; j++)
                         if (array[i][j] == 0)
                         {
                             bool flag = false;
@@ -479,14 +474,14 @@ namespace WpfApp_BarleyBreak
                             //осуществляем обмен элементов
                             array[i][j] = index;//запишем номер элемента в новую позицию
                             array[current_posRow][current_posColumn] = 0;//в старой позиции затираем его размещение
-                            new_pos = i * rows + j;//готовим новую позицию
+                            new_pos = i * columns + j;//готовим новую позицию
 
                             //установим новую позицию элементу
                             if (new_pos > current_pos)
                             {
                                 uniformGridGame.Children.RemoveAt(new_pos);
                                 uniformGridGame.Children.RemoveAt(current_pos);
-                                uniformGridGame.Children.Insert(current_pos, new Button() { Visibility = Visibility.Hidden, Tag = 0 });
+                                uniformGridGame.Children.Insert(current_pos, CreateLastPiece());
                                 uniformGridGame.Children.Insert(new_pos, button);
                             }
                             else
@@ -494,7 +489,7 @@ namespace WpfApp_BarleyBreak
                                 uniformGridGame.Children.RemoveAt(current_pos);
                                 uniformGridGame.Children.RemoveAt(new_pos);
                                 uniformGridGame.Children.Insert(new_pos, button);
-                                uniformGridGame.Children.Insert(current_pos, new Button() { Visibility = Visibility.Hidden, Tag = 0 });
+                                uniformGridGame.Children.Insert(current_pos, CreateLastPiece());
                             }
 
                         }
@@ -502,17 +497,25 @@ namespace WpfApp_BarleyBreak
             }
         }
 
+        private Button CreateLastPiece()
+        {
+            return new Button() { Visibility = Visibility.Hidden, Tag = 0 };
+        }
+
         private void PrepareUniformGrid()
         {
+            int rows = uniformGridGame.Rows;
+            int columns = uniformGridGame.Columns;
+
             //создадим и заполним(проинициализируем) массив
-            array = new int[4][];
-            for (int i = 0; i < 4; i++)
+            array = new int[rows][];
+            for (int i = 0; i < rows; i++)
             {
-                array[i] = new int[4];
-                for (int j = 0; j < 4; j++)
-                    array[i][j] = 1 + i + i * 3 + j;
+                array[i] = new int[columns];
+                for (int j = 0; j < columns; j++)
+                    array[i][j] = 1 + i + i * (columns-1) + j;
             }
-            array[3][3] = 0;
+            array[rows - 1][columns - 1] = 0;
 
             //очистка игрового поля перед новой игрой
             uniformGridGame.Children.Clear();
@@ -520,10 +523,7 @@ namespace WpfApp_BarleyBreak
             if (flag_image)
                 PrepareButtonImage();
             else
-                PrepareButtonNummer();
-          
-            int rows = uniformGridGame.Rows;
-            int columns = uniformGridGame.Columns;
+                PrepareButtonNummer();     
 
             Binding bndWidth;
             Binding bndHeight;
@@ -585,14 +585,18 @@ namespace WpfApp_BarleyBreak
 
         private void PrepareButtonNummer()
         {
+            int rows = uniformGridGame.Rows;
+            int columns = uniformGridGame.Columns;
+            int cnt = rows * columns;
+
             Button button;
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < cnt - 1; i++)
             {
                 button = CreateButtonNummer((i + 1).ToString());
                 button.Tag = i + 1;
                 uniformGridGame.Children.Add(button);
             }
-            uniformGridGame.Children.Add(new Button() { Visibility = Visibility.Hidden, Tag = 0 });
+            uniformGridGame.Children.Add(CreateLastPiece());
         }
 
         Image source;//исходная картинка
@@ -600,6 +604,8 @@ namespace WpfApp_BarleyBreak
         {             
             int rows = uniformGridGame.Rows;
             int columns = uniformGridGame.Columns;
+            int cnt = rows * columns;
+            
             int width = (int)uniformGridGame.ActualWidth;
             int height = (int)uniformGridGame.ActualHeight;
            
@@ -616,7 +622,7 @@ namespace WpfApp_BarleyBreak
 
             //разобъем картинку на 15 частей(16 пустая - отсутствует)
             Button buttonImage;
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < cnt - 1; i++)
             {
                 //сделаем все элементы
 
@@ -624,7 +630,7 @@ namespace WpfApp_BarleyBreak
                 // Create a CroppedBitmap based off of a xaml defined resource.
                 CroppedBitmap cb = new CroppedBitmap(
                    bSource,
-                   new Int32Rect(i % 4 * width_delta, i / 4 * height_delta, width_delta, height_delta));       //select region rect
+                   new Int32Rect(i % columns * width_delta, i / columns * height_delta, width_delta, height_delta));       //select region rect
                 Image imagePiece = new Image
                 {
                     Source = cb,
@@ -636,7 +642,7 @@ namespace WpfApp_BarleyBreak
                 buttonImage.Tag = i + 1;//укажем номер в стандартном расположении пятнашек
                 uniformGridGame.Children.Add(buttonImage);
             }
-            uniformGridGame.Children.Add(new Button() { Visibility = Visibility.Hidden, Tag = 0 });
+            uniformGridGame.Children.Add(CreateLastPiece());
         }
 
         private Button CreateButtonNummer(string text)
@@ -720,8 +726,7 @@ namespace WpfApp_BarleyBreak
             // Инициализация хранилища резервных копий
             MementoBackUp memory = new MementoBackUp();
             Object_BarleyBreak last_state = new Object_BarleyBreak();
-            //last_state.SetIDnumber(0);
-
+      
             last_state.ID = (last_state.ID.Item1, last_state.ID.Item2, 1);
 
             //если словарь уже создавался, загрузим его
@@ -732,38 +737,80 @@ namespace WpfApp_BarleyBreak
                 memory = XML.Load(filename);
             }
 
-            //            // Выполнение back-up
-            //            memory[last_state.ID] = last_state.Put();
-
             // Восстановление данных основного объекта из резервной копии
-            last_state.Get(memory[last_state.ID]);           
+            last_state.Get(memory[last_state.ID]);
+
+            // Восстановление состояния программы
+            RecoveryBarleyBreakState(last_state);
         }
 
         private void SaveLastState(string filename)
         {
             // Инициализация хранилища резервных копий
             MementoBackUp memory = new MementoBackUp();
-            Object_BarleyBreak last_state = new Object_BarleyBreak();
-            //last_state.SetIDnumber(0);
+            Object_BarleyBreak last_state = new Object_BarleyBreak()
+            {
+                time = time,
+                SoundOnOff = SoundOnOff,
+                MusicOnOff = MusicOnOff,
+                array = array,//(int[][])array.Clone(),
+                flag_image = flag_image,
+                ImageFilename = ImageFilename,
+                Count = Count,
+                rows = uniformGridGame.Rows,
+                columns = uniformGridGame.Columns,
+                PlayerName = PlayerName
+            };
 
             last_state.ID = (last_state.ID.Item1, last_state.ID.Item2, 1);
-
-            List<string> list = new List<string>();
-        //    foreach (var tabControl in this.tabControl.TabPages)
-        //    {
-        //        if (tabControl is TabPage tabPage)
-        //        {
-        //            if (tabPage.Tag is FileInfo tabFile_info)
-        //                // получаем выбранный файл
-        //                list.Add(tabFile_info.FullName);
-        //        }
-        //    }
-            last_state.Files = list.ToArray();
 
             // Выполнение back-up
             memory[last_state.ID] = last_state.Put();
 
             XML.Save(memory, filename);
+        }
+
+        private void RecoveryBarleyBreakState(Object_BarleyBreak last_state)
+        {
+            //восстановим параметры игры
+            SoundOnOff = last_state.SoundOnOff;
+            MusicOnOff = last_state.MusicOnOff;
+            flag_image = last_state.flag_image;
+            ImageFilename = last_state.ImageFilename;
+            Count = last_state.Count;
+            uniformGridGame.Rows = last_state.rows;
+            uniformGridGame.Columns = last_state.columns;
+            PlayerName = last_state.PlayerName;
+
+            //подготовим новую игру по умолчанию
+            PrepareUniformGrid();
+
+            //приведем игру к сохраненному состоянию
+            int rows = uniformGridGame.Rows;
+            int columns = uniformGridGame.Columns;
+            int cnt = rows * columns;
+
+            for(int i=0;i<cnt;i++)
+            {
+                int index = last_state.array[i / columns][i % columns];
+                for (int j = i; j < cnt; j++)
+                {
+                    Button button = (Button)uniformGridGame.Children[j];
+                    if ((int)button.Tag == index)
+                    {
+                        uniformGridGame.Children.RemoveAt(j);
+                        uniformGridGame.Children.Insert(i, button);
+                    }
+                }
+            }
+            array = last_state.array;
+
+            //запустим таймер
+            timer_game.Start();
+            //начнем игру
+            labelGameEnd.Visibility = Visibility.Hidden;
+            //установим время на момент сохранения сотояния
+            time = last_state.time;
         }
     }
 }

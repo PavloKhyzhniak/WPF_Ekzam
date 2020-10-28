@@ -23,8 +23,6 @@ namespace DP_Memento
     {
         [XmlElement(DataType = "date")]
         DateTime Data { get; set; }
-
-        string Show();
     }
 
 //    [Serializable]
