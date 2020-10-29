@@ -12,6 +12,13 @@
         Height="600" Width="400" MinWidth="400" MinHeight="600" SizeToContent="WidthAndHeight"
         AllowsTransparency="True" WindowStyle="None" Loaded="mainWindowTicTacToe_Loaded" Unloaded="mainWindowTicTacToe_Unloaded"
         >
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+        CaptionHeight="0"
+        ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
+    
     <Window.Resources>
 
         <Color x:Key="ControlLightColor">White</Color>

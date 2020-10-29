@@ -6,11 +6,17 @@
         xmlns:local="clr-namespace:WpfApp_Minor"
         mc:Ignorable="d"
         x:Name="mainWindow_Minor"
-           Style="{DynamicResource BaseLinearGradientWindow}" 
-      WindowStyle="None" FontFamily="Segoe Script" FontSize="14" AllowsTransparency="True" 
-       SizeToContent="WidthAndHeight"
+        Style="{DynamicResource BaseLinearGradientWindow}" 
+        WindowStyle="None" FontFamily="Segoe Script" FontSize="14" AllowsTransparency="True" 
+        SizeToContent="WidthAndHeight"
         Title="Minor" MinHeight="300" MinWidth="300" Loaded="mainWindow_Minor_Loaded" Unloaded="mainWindow_Minor_Unloaded">
 
+    <WindowChrome.WindowChrome>
+        <WindowChrome 
+        CaptionHeight="0"
+        ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
+    
     <Window.Resources>
 
         <Style TargetType="CheckBox">
@@ -38,11 +44,9 @@
         <Border x:Name="borderGame" BorderThickness="1" BorderBrush="AliceBlue" 
                 Margin="10" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ClipToBounds="True" 
                 Width="{Binding ElementName=uniformGrid_Place, Path=Width,Mode=TwoWay}"
-                Height="{Binding ElementName=uniformGrid_Place, Path=Height, Mode=TwoWay}"
-               
+                Height="{Binding ElementName=uniformGrid_Place, Path=Height, Mode=TwoWay}"               
                 >
-            <UniformGrid x:Name="uniformGrid_Place" 
-                         
+            <UniformGrid x:Name="uniformGrid_Place"                          
                          Grid.Row="2" Grid.ColumnSpan="2"
                          ClipToBounds="True" 
                          ScrollViewer.VerticalScrollBarVisibility="Disabled" />

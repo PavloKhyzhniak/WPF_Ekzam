@@ -129,13 +129,7 @@ namespace WpfApp_Minor
 
             uniformGrid_Place.Rows = cnt_rows;
             uniformGrid_Place.Columns = cnt_colums;
-
-        //    uniformGrid_Place.MinWidth = cnt_colums * 15;
-        //    uniformGrid_Place.MinHeight = cnt_rows * 15;
-
-        //    mainWindow_Minor.MinHeight = uniformGrid_Place.Height + 2 * 20 + 3 * button_NewGame.Height;
-        //    mainWindow_Minor.MinWidth = uniformGrid_Place.Width + 2 * 20;
-
+                
             Brush brush = new SolidColorBrush(Colors.DarkGray);
             for (int i = 0; i < cnt_rows; i++)
                 for (int j = 0; j < cnt_colums; j++)
@@ -151,15 +145,8 @@ namespace WpfApp_Minor
                         VerticalContentAlignment = VerticalAlignment.Center
                     };
 
-                    //                    //  new_button.MouseDown += new System.Windows.Input.MouseButtonEventHandler(this.button_Down);
-                    //                    new_button.MouseLeftButtonDown += button_Down;
-                    //                    new_button.MouseRightButtonDown += button_Down;
-                    //                    //                    new_button.Click += button_Down;
                     new_button.PreviewMouseLeftButtonDown += button_Down;
                     new_button.PreviewMouseRightButtonDown += button_Down;
-//                    // Указание ячейки для кнопки
-//                    Grid.SetRow(new_button, i);
-//                    Grid.SetColumn(new_button, j);
 
                     uniformGrid_Place.Children.Add(new_button);
                 }
