@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_BarleyBreak"
         mc:Ignorable="d"
-        Title="High Score Table Barley Break" Height="450" Width="200" WindowStartupLocation="CenterOwner"
+        Title="High Score Table Barley Break" Height="450" Width="200" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
         Style="{DynamicResource BaseLinearGradientWindow}" AllowsTransparency="True" WindowStyle="None">
     
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
         <Label HorizontalContentAlignment="Center">HIGH SCORE</Label>
         <ListView x:Name="listView" Background="Transparent">
             <ListBox.ItemContainerStyle>
@@ -27,9 +27,29 @@
                                 </Border>
 
                                 <ControlTemplate.Triggers>
-                                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                    <!--<Trigger Property="ItemsControl.AlternationIndex" Value="1">
                                         <Setter Property="Background" Value="LightBlue"/>
-                                    </Trigger>
+                                    </Trigger>-->
+                                    <EventTrigger RoutedEvent="ListBoxItem.MouseEnter">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="FontSize"
+                                                         To="22" Duration="0:0:0.5"></DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="ListBoxItem.MouseLeave">
+                                        <EventTrigger.Actions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetProperty="FontSize"
+                                                         Duration="0:0:0.5" BeginTime="0:0:0.5"></DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger.Actions>
+                                    </EventTrigger>
                                     <!--<Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="LimeGreen"/>
                                         <Setter Property="Foreground" Value="White"/>

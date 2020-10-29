@@ -67,7 +67,7 @@
     <Compile Include="HighScoreTable.xaml.cs">
       <DependentUpon>HighScoreTable.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="MainWindow_BarleyBreak.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -75,8 +75,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="MainWindow_BarleyBreak.xaml.cs">
+      <DependentUpon>MainWindow_BarleyBreak.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="HighScoreTable.xaml">

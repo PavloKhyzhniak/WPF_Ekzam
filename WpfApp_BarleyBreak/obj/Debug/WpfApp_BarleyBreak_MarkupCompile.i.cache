@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Work_Step2019\08_VisualC#_WPF\AppWPF_C#_ch03_10\WpfAppEkzam\WpfApp_BarleyBreak\App.xaml
-8-625232503
+8-2086169890
 111917209496
-16-2132836031
+16264532
 16-1017904831
-MainWindow.xaml;HighScoreTable.xaml;MessageBox.xaml;Styles\Button.xaml;Styles\CheckBox.xaml;Styles\Page.xaml;Styles\TextBox.xaml;Styles\Window.xaml;
+MainWindow_BarleyBreak.xaml;HighScoreTable.xaml;MessageBox.xaml;Styles\Button.xaml;Styles\CheckBox.xaml;Styles\Page.xaml;Styles\TextBox.xaml;Styles\Window.xaml;
 
-True
+False
 

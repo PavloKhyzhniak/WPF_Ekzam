@@ -38,12 +38,12 @@ namespace WpfApp_BarleyBreak {
     /// <summary>
     /// MainWindow
     /// </summary>
-    public partial class MainWindow : System.Windows.Window, System.Windows.Markup.IComponentConnector {
+    public partial class MainWindow_BarleyBreak : System.Windows.Window, System.Windows.Markup.IComponentConnector {
         
         
         #line 11 "..\..\MainWindow.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        internal WpfApp_BarleyBreak.MainWindow mainWindowBarleyBreak;
+        internal WpfApp_BarleyBreak.MainWindow_BarleyBreak mainWindowBarleyBreak;
         
         #line default
         #line hidden
@@ -151,7 +151,7 @@ namespace WpfApp_BarleyBreak {
             switch (connectionId)
             {
             case 1:
-            this.mainWindowBarleyBreak = ((WpfApp_BarleyBreak.MainWindow)(target));
+            this.mainWindowBarleyBreak = ((WpfApp_BarleyBreak.MainWindow_BarleyBreak)(target));
             
             #line 12 "..\..\MainWindow.xaml"
             this.mainWindowBarleyBreak.Loaded += new System.Windows.RoutedEventHandler(this.mainWindowBarleyBreak_Loaded);

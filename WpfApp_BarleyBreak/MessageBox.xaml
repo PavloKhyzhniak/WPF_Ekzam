@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfApp_BarleyBreak"
         mc:Ignorable="d"
         Title="Message Box" Height="250" Width="300" SizeToContent="WidthAndHeight"
-        Style="{DynamicResource BaseLinearGradientWindow}" AllowsTransparency="True" WindowStyle="None">
+        Style="{DynamicResource BaseLinearGradientWindow}" AllowsTransparency="True" WindowStyle="None" WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
         <Style TargetType="Button">
