@@ -79,7 +79,7 @@
     
     <ControlTemplate x:Key="WindowControlTemplate" TargetType="{x:Type Window}">
         <Border 
-            CornerRadius="20"
+            CornerRadius="20,20,0,20"
         Background="{TemplateBinding Background}" 
         BorderBrush="{TemplateBinding BorderBrush}" 
         BorderThickness="{TemplateBinding BorderThickness}"

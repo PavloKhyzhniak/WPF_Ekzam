@@ -402,6 +402,8 @@ namespace WpfApp_Minor
         {
             if(sender is CheckBox checkBox)
             {
+                if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav");
+
                 if (checkBox.IsChecked==true)
                     SoundOnOff = true;
                 else
@@ -413,6 +415,8 @@ namespace WpfApp_Minor
         {
             if (sender is CheckBox checkBox)
             {
+                if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav");
+
                 if (checkBox.IsChecked == true)
                     MusicOnOff = true;
                 else
