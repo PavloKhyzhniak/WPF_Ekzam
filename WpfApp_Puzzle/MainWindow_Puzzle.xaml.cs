@@ -227,9 +227,14 @@ namespace WpfApp_Puzzle
                     BindingOperations.SetBinding(scale, ScaleTransform.ScaleYProperty, scaleY);
 
                     uniformGridGame.Children.Add(path);
-//                    Grid.SetZIndex(border, 1000);
-                //    Grid.SetColumn(border, j);
-                //    Grid.SetRow(border, i);
+            //                    Grid.SetZIndex(border, 1000);
+            //    Grid.SetColumn(border, j);
+            //    Grid.SetRow(border, i);
+
+            uniformGridGame.UpdateLayout();
+            path.Width = path.ActualWidth;
+            path.Width = path.ActualWidth;
+            path.UpdateLayout();
         }
 
         private void ButtonNewGame_Click(object sender, RoutedEventArgs e)
@@ -512,35 +517,37 @@ namespace WpfApp_Puzzle
             //исходная картинка
             bSource = new BitmapImage(new Uri(ImageFilename))
             {
-                SourceRect = new Int32Rect(0, 0, width, height)
+                SourceRect = new Int32Rect(0, 0, width, height)               
             };
-
+                       
             RecalculatedScale();
 
             uniformGridGame.Background = new ImageBrush(bSource) { Stretch = Stretch.Fill, Opacity = 0.2 };
 
-            int width_delta = (int)bSource.PixelWidth / rows;
-            int height_delta = (int)bSource.PixelHeight / columns;
-             
+            //            int width_delta = (int)bSource.PixelWidth / rows;
+            //            int height_delta = (int)bSource.PixelHeight / columns;
+            int width_delta = (int)bSource.Width / rows;
+            int height_delta = (int)bSource.Height / columns;
+
             //разобъем картинку на 16 частей
 
-                    /*
-                     *  A-------B-------*-------*-------*-----
-                     *  |       |       |       |       |               
-                     *  |       |       |       |       |
-                     *  |       |       |       |       |
-                     *  D-------C-------*-------*-------*-----
-                     *  |       |       |       |       |               
-                     *  |       |       |       |       |
-                     *  |       |       |       |       |
-                     *  *-------*-------*-------*-------*-----
-                     *  |       |       |       |       |               
-                     *  |       |       |       |       |
-                     *  |       |       |       |       |
-                     * 
-                    */
+            /*
+             *  A-------B-------*-------*-------*-----
+             *  |       |       |       |       |               
+             *  |       |       |       |       |
+             *  |       |       |       |       |
+             *  D-------C-------*-------*-------*-----
+             *  |       |       |       |       |               
+             *  |       |       |       |       |
+             *  |       |       |       |       |
+             *  *-------*-------*-------*-------*-----
+             *  |       |       |       |       |               
+             *  |       |       |       |       |
+             *  |       |       |       |       |
+             * 
+            */
 
-                    list_pathstring = new List<PathString>();
+            list_pathstring = new List<PathString>();
 
             Point A;
             Point B;
@@ -926,8 +933,8 @@ namespace WpfApp_Puzzle
         {
             if (bSource != null)
             {
-                ScaleX = uniformGridGame.ActualWidth/ bSource.Width;
-                ScaleY = uniformGridGame.ActualHeight/ bSource.Height;
+                ScaleX = uniformGridGame.ActualWidth / bSource.Width;
+                ScaleY = uniformGridGame.ActualHeight / bSource.Height;
             }
         }
 
