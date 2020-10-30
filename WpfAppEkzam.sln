@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp_BarleyBreak", "WpfAp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp_Minor", "WpfApp_Minor\WpfApp_Minor.csproj", "{1B18109C-FF4C-4880-9168-C744D5842D9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp_Puzzle", "WpfApp_Puzzle\WpfApp_Puzzle.csproj", "{96CCC93C-D3D3-4827-98B7-E8E2B8CB899B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1B18109C-FF4C-4880-9168-C744D5842D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B18109C-FF4C-4880-9168-C744D5842D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B18109C-FF4C-4880-9168-C744D5842D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96CCC93C-D3D3-4827-98B7-E8E2B8CB899B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96CCC93C-D3D3-4827-98B7-E8E2B8CB899B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96CCC93C-D3D3-4827-98B7-E8E2B8CB899B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96CCC93C-D3D3-4827-98B7-E8E2B8CB899B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

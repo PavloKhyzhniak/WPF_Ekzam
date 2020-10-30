@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -54,11 +55,11 @@ namespace WpfApp_BarleyBreak
             CloseCommand = new DelegateCommand<object>(obj => { PageModel_BaseFunction.ClosePage(obj); });
             DragCommand = new DelegateCommand<object>(obj => { PageModel_BaseFunction.DragPage(obj); });
 
-            NewGameCommand       = new DelegateCommand<object>(obj => {if(SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); NewGame(); });
-            LoadGameCommand      = new DelegateCommand<object>(obj => {if(SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); LoadGame(); });
-            SetImageCommand      = new DelegateCommand<object>(obj => {if(SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); SetImage(); });
-            SoundOnOffCommand  = new DelegateCommand<object>(obj => {if(SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); SoundOnOff = !SoundOnOff; });
-            MusicOnOffCommand = new DelegateCommand<object>(obj => {if(SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); MusicOnOff = !MusicOnOff; if (MusicOnOff) mp.Play(); else mp.Pause(); });
+            NewGameCommand = new DelegateCommand<object>(obj => { if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); NewGame(); });
+            LoadGameCommand = new DelegateCommand<object>(obj => { if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); LoadGame(); });
+            SetImageCommand = new DelegateCommand<object>(obj => { if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); SetImage(); });
+            SoundOnOffCommand = new DelegateCommand<object>(obj => { if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); SoundOnOff = !SoundOnOff; });
+            MusicOnOffCommand = new DelegateCommand<object>(obj => { if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); MusicOnOff = !MusicOnOff; if (MusicOnOff) mp.Play(); else mp.Pause(); });
             HighScoreShowCommand = new DelegateCommand<object>(obj => { if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); HighScoreShow(); });
 
             ExitCommand = new DelegateCommand<object>(obj => { if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav"); PageModel_BaseFunction.ClosePage(obj); });
@@ -73,24 +74,24 @@ namespace WpfApp_BarleyBreak
         {
             var basePath = System.AppDomain.CurrentDomain.BaseDirectory;
             FileInfo info = new FileInfo(System.IO.Path.Combine(basePath, sound_filename));
-            if(info.Exists)
+            if (info.Exists)
             {
 
-            mp.Open(new Uri(System.IO.Path.Combine(basePath, sound_filename), UriKind.Absolute));
-            mp.Volume = 1;
-            mp.Balance = 0;
-            mp.Position = new TimeSpan(0, 0, 0);
-            mp.SpeedRatio = 1;
+                mp.Open(new Uri(System.IO.Path.Combine(basePath, sound_filename), UriKind.Absolute));
+                mp.Volume = 1;
+                mp.Balance = 0;
+                mp.Position = new TimeSpan(0, 0, 0);
+                mp.SpeedRatio = 1;
 
-            if (repeat)
-                mp.MediaEnded += MusicReplay;
+                if (repeat)
+                    mp.MediaEnded += MusicReplay;
 
-            mp.MediaFailed += (o, args) =>
-            {
-                MessageBox.Show("Media Failed!!!\n" + args.ErrorException.Message);
-            };
+                mp.MediaFailed += (o, args) =>
+                {
+                    MessageBox.Show("Media Failed!!!\n" + args.ErrorException.Message);
+                };
 
-            mp.Play();
+                mp.Play();
             }
 
         }
@@ -101,7 +102,7 @@ namespace WpfApp_BarleyBreak
             mp.Play();
         }
 
-        private void SoundWAV(string sound_filename,bool repeat = false)
+        private void SoundWAV(string sound_filename, bool repeat = false)
         {
             var basePath = System.AppDomain.CurrentDomain.BaseDirectory;
             System.Media.SoundPlayer player = new System.Media.SoundPlayer();
@@ -174,11 +175,11 @@ namespace WpfApp_BarleyBreak
         private void ButtonShuffle_Click(object sender, RoutedEventArgs e)
         {
             if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\MenuSelectionClick.wav");
-            
+
             //запустим безопасное перемешивание - перемешивание элементов в обратном порядке 
             ShuffleSafe_Barley_Break(Count);
             time = 0;//обнулим таймер
-         
+
             timer_game.Start();
             labelGameEnd.Visibility = Visibility.Hidden;
         }
@@ -249,7 +250,7 @@ namespace WpfApp_BarleyBreak
             {
                 int rows = uniformGridGame.Rows;
                 int columns = uniformGridGame.Columns;
-                
+
                 //получение позиции
                 int current_pos = uniformGridGame.Children.IndexOf(button);
                 int current_posRow = current_pos / columns;
@@ -282,7 +283,7 @@ namespace WpfApp_BarleyBreak
                             new_pos = i * columns + j;//готовим новую позицию
 
                             //установим новую позицию элементу
-                            if(new_pos>current_pos)
+                            if (new_pos > current_pos)
                             {
                                 if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\leave.wav");
 
@@ -337,7 +338,7 @@ namespace WpfApp_BarleyBreak
                 filestream = File.Create(scorefilename);
             }
             else
-                filestream = File.Open(scorefilename,FileMode.Open);
+                filestream = File.Open(scorefilename, FileMode.Open);
             info = null;
 
             List<playerScore> players = new List<playerScore>();
@@ -371,12 +372,12 @@ namespace WpfApp_BarleyBreak
             filestream.Close();
 
             //Add New Player in High Score Table
-            if(newPlayer!=null)
+            if (newPlayer != null)
                 players.Add(newPlayer);
 
             //Sorted Score By Ascending
             var playersSorted = players.OrderBy(p => p.Score);
-                
+
             //Create High Score Table List
             int i = 0;
             foreach (var item in playersSorted)
@@ -452,9 +453,9 @@ namespace WpfApp_BarleyBreak
                 var button = uniformGridGame.Children[current_pos];
 
                 int index = (int)(((Button)button).Tag);
-    
+
                 int new_pos;
-    
+
                 for (int i = 0; i < rows; i++)
                     for (int j = 0; j < columns; j++)
                         if (array[i][j] == 0)
@@ -513,7 +514,7 @@ namespace WpfApp_BarleyBreak
             {
                 array[i] = new int[columns];
                 for (int j = 0; j < columns; j++)
-                    array[i][j] = 1 + i + i * (columns-1) + j;
+                    array[i][j] = 1 + i + i * (columns - 1) + j;
             }
             array[rows - 1][columns - 1] = 0;
 
@@ -523,7 +524,7 @@ namespace WpfApp_BarleyBreak
             if (flag_image)
                 PrepareButtonImage();
             else
-                PrepareButtonNummer();     
+                PrepareButtonNummer();
 
             Binding bndWidth;
             Binding bndHeight;
@@ -533,7 +534,7 @@ namespace WpfApp_BarleyBreak
             else
                 bndWidth = new Binding("Width") { ElementName = "borderGame" };
             //uniformGridGame.Width = mainWindowBarleyBreak.ActualWidth -100;
-            
+
             //BindingOperations.ClearAllBindings(uniformGridGame);
             BindingOperations.ClearBinding(uniformGridGame, UniformGrid.WidthProperty);
             BindingOperations.SetBinding(uniformGridGame, UniformGrid.WidthProperty, bndWidth);
@@ -563,8 +564,8 @@ namespace WpfApp_BarleyBreak
         private void mainWindowBarleyBreak_Loaded(object sender, RoutedEventArgs e)
         {
             textBoxCountShuffle.Text = Count.ToString();
-            
-            if (MusicOnOff) MusicMP3(".\\..\\..\\Resources\\PurplePlanetMusic-Awakening(1_50)120bpm(L).mp3",true);
+
+            if (MusicOnOff) MusicMP3(".\\..\\..\\Resources\\PurplePlanetMusic-Awakening(1_50)120bpm(L).mp3", true);
 
             MessageBox.Show(
 "Игра \"Пятнашки\" (7 баллов)" +
@@ -601,21 +602,21 @@ namespace WpfApp_BarleyBreak
 
         Image source;//исходная картинка
         private void PrepareButtonImage()
-        {             
+        {
             int rows = uniformGridGame.Rows;
             int columns = uniformGridGame.Columns;
             int cnt = rows * columns;
-            
+
             int width = (int)uniformGridGame.ActualWidth;
             int height = (int)uniformGridGame.ActualHeight;
-           
+
             //исходная картинка
             BitmapSource bSource = new BitmapImage(new Uri(ImageFilename))
-            {                
-                SourceRect = new Int32Rect(0,0,width,height)                
+            {
+                SourceRect = new Int32Rect(0, 0, width, height)
             };
 
-            uniformGridGame.Background = new ImageBrush(bSource) { Stretch=Stretch.Fill,Opacity=0.2 };
+            uniformGridGame.Background = new ImageBrush(bSource) { Stretch = Stretch.Fill, Opacity = 0.2 };
 
             int width_delta = (int)bSource.PixelWidth / rows;
             int height_delta = (int)bSource.PixelHeight / columns;
@@ -634,7 +635,8 @@ namespace WpfApp_BarleyBreak
                 Image imagePiece = new Image
                 {
                     Source = cb,
-                    Stretch = Stretch.Fill
+                    Stretch = Stretch.Fill,
+
                 };
 
                 //получим эту часть - используя операцию ВЫРЕЗКА
@@ -643,6 +645,220 @@ namespace WpfApp_BarleyBreak
                 uniformGridGame.Children.Add(buttonImage);
             }
             uniformGridGame.Children.Add(CreateLastPiece());
+        }
+        
+        class PathString
+        {
+            public string Top { get; set; }
+            public string Bottom { get; set; }
+            public string Left { get; set; }
+            public string Right { get; set; }
+
+            public string GetPathString()
+            {
+                return Top + Right + Bottom + Left;
+            }
+        }
+
+        List<PathString> list_pathstring;
+        private void PrepareCanvasImagePuzzle()
+        {
+            int rows = uniformGridGame.Rows;
+            int columns = uniformGridGame.Columns;
+            int cnt = rows * columns;
+
+            int width = (int)uniformGridGame.ActualWidth;
+            int height = (int)uniformGridGame.ActualHeight;
+
+            //исходная картинка
+            BitmapSource bSource = new BitmapImage(new Uri(ImageFilename))
+            {
+                SourceRect = new Int32Rect(0, 0, width, height)
+            };
+
+            uniformGridGame.Background = new ImageBrush(bSource) { Stretch = Stretch.Fill, Opacity = 0.2 };
+
+            int width_delta = (int)bSource.PixelWidth / rows;
+            int height_delta = (int)bSource.PixelHeight / columns;
+
+            //разобъем картинку на 15 частей(16 пустая - отсутствует)
+            
+            /*
+             *  A-------B-------*-------*-------*-----
+             *  |       |       |       |       |               
+             *  |       |       |       |       |
+             *  |       |       |       |       |
+             *  D-------C-------*-------*-------*-----
+             *  |       |       |       |       |               
+             *  |       |       |       |       |
+             *  |       |       |       |       |
+             *  *-------*-------*-------*-------*-----
+             *  |       |       |       |       |               
+             *  |       |       |       |       |
+             *  |       |       |       |       |
+             * 
+            */
+
+            list_pathstring = new List<PathString>();
+
+            Point A;
+            Point B;
+            Point C;
+            Point D;
+           
+            for (int i = 0; i < cnt - 1; i++)
+            {
+                //сделаем все элементы
+
+                A = new Point(i % columns * width_delta, i / columns * height_delta);
+                B = new Point(i % columns * width_delta + width_delta, i / columns * height_delta);
+                C = new Point(i % columns * width_delta + width_delta, i / columns * height_delta + height_delta);
+                D = new Point(i % columns * width_delta, i / columns * height_delta + height_delta);
+
+                int cnt_point = 10;
+                int deltaX = width_delta / cnt_point;
+                int deltaY = height_delta / cnt_point;
+
+                //////////////////////////////////////////////////
+                ///
+                //////////////////////////////////////////////////
+
+                PathString new_path = null;
+
+                //first left top piece
+                if (i == 0) //(i / columns == 0 && i % columns == 0)
+                    new_path = new PathString()
+                    {
+                        Top = CreatePathMoveX(A, B, cnt_point, 0, 0),
+                        Right = CreatePathMoveY(B, C, cnt_point, -deltaX, deltaX),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, -deltaY, deltaY),
+                        Left = CreatePathMoveY(D, A, cnt_point, 0, 0)
+                    };
+
+                //top piece
+                else if (i / columns == 0 && i % columns != 0)
+                    new_path = new PathString()
+                    {
+                        Top = CreatePathMoveX(A, B, cnt_point, 0, 0),
+                        Right = CreatePathMoveY(B, C, cnt_point, -deltaX, deltaX),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, -deltaY, deltaY),
+                        Left = list_pathstring[i - 1].Right
+                    };
+
+                //last right top piece
+                else if (i == columns-1) //(i / columns == 0 && i % columns == 0)
+                    new_path = new PathString()
+                    {
+                        Top = CreatePathMoveX(A, B, cnt_point, 0, 0),
+                        Right = CreatePathMoveY(B, C, cnt_point, 0, 0),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, -deltaY, deltaY),
+                        Left = list_pathstring[i - 1].Right
+                    };
+
+                //first middle piece
+                else if (i / columns != 0 && i % columns == 0)
+                    new_path = new PathString()
+                    {
+                        Top = list_pathstring[i - 1].Bottom,
+                        Right = CreatePathMoveY(B, C, cnt_point, -deltaX, deltaX),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, -deltaY, deltaY),
+                        Left = CreatePathMoveY(D, A, cnt_point, 0, 0)
+                    };
+
+                //middle piece
+                else if (i / columns != 0 && i % columns != 0)
+                    new_path = new PathString()
+                    {
+                        Top = list_pathstring[i - 1].Bottom,
+                        Right = CreatePathMoveY(B, C, cnt_point, -deltaX, deltaX),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, -deltaY, deltaY),
+                        Left = list_pathstring[i - 1].Right
+                    };
+
+                //last middle piece
+                else if (i / columns != 0 && i % columns == columns-1)
+                    new_path = new PathString()
+                    {
+                        Top = list_pathstring[i - 1].Bottom,
+                        Right = CreatePathMoveY(B, C, cnt_point, 0, 0),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, -deltaY, deltaY),
+                        Left = list_pathstring[i - 1].Right
+                    };
+
+                //first bottom piece
+                else if (i / columns == rows && i % columns == 0)
+                    new_path = new PathString()
+                    {
+                        Top = list_pathstring[i - 1].Bottom,
+                        Right = CreatePathMoveY(B, C, cnt_point, -deltaX, deltaX),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, 0, 0),
+                        Left = CreatePathMoveY(D, A, cnt_point, 0, 0)
+                    };
+
+                //bottom piece
+                else if (i / columns == rows && i % columns != 0)
+                    new_path = new PathString()
+                    {
+                        Top = list_pathstring[i - 1].Bottom,
+                        Right = CreatePathMoveY(B, C, cnt_point, -deltaX, deltaX),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, 0, 0),
+                        Left = list_pathstring[i - 1].Right
+                    };
+
+                //last bottom piece
+                else if (i / columns == rows && i % columns == columns-1)
+                    new_path = new PathString()
+                    {
+                        Top = list_pathstring[i - 1].Bottom,
+                        Right = CreatePathMoveY(B, C, cnt_point, 0, 0),
+                        Bottom = CreatePathMoveX(C, D, cnt_point, 0, 0),
+                        Left = list_pathstring[i - 1].Right
+                    };
+
+                list_pathstring.Add(new_path);
+
+                //////////////////////////////////////////////////
+                ///
+                //////////////////////////////////////////////////
+
+                //разместим фигуру на холсте, его и будем анимировать
+                Canvas new_canvas = new Canvas()
+                {
+                    RenderTransformOrigin = new Point(0.5, 0.5),
+                    Tag = i + 1//укажем номер в стандартном расположении
+                };
+                new_canvas.Children.Add(CreateFigureFromPathPuzzle(new_path));
+            }
+        }
+               
+        private string CreatePathMoveX(Point Start, Point End, int cnt_point, int deltaYmin, int deltaYmax)
+        {
+            string currentPath;
+            Random rand = new Random();
+
+            int deltaX = (int)(End.X - Start.X) / cnt_point;
+
+            currentPath = " M " + (int)Start.X + "," + (int)Start.Y;
+            for (int k = 1; k < cnt_point; k++)
+                currentPath += " L " + (int)(Start.X + k * deltaX) + "," + (int)(Start.Y + rand.Next(deltaYmin, deltaYmax));
+            currentPath += " L " + (int)End.X + "," + (int)End.Y;
+
+            return currentPath;
+        }
+
+        private string CreatePathMoveY(Point Start, Point End, int cnt_point, int deltaXmin, int deltaXmax)
+        {
+            string currentPath;
+            Random rand = new Random();
+
+            int deltaY = (int)(End.Y - Start.Y) / cnt_point;
+
+            currentPath = " M " + (int)Start.X + "," + (int)Start.Y;
+            for (int k = 1; k < cnt_point; k++)
+                currentPath += " L " + (int)(Start.X + rand.Next(deltaXmin, deltaXmax)) + "," + (int)(Start.Y + k * deltaY);
+            currentPath += " L " + (int)End.X + "," + (int)End.Y;
+
+            return currentPath;
         }
 
         private Button CreateButtonNummer(string text)
@@ -678,6 +894,17 @@ namespace WpfApp_BarleyBreak
             button.Style = (Style)TryFindResource("PiecesAnimation");
 
             return button;
+        }
+
+        private System.Windows.Shapes.Path CreateFigureFromPathPuzzle(PathString pathString)
+        {
+            System.Windows.Shapes.Path path = new System.Windows.Shapes.Path()
+            {
+                RenderTransformOrigin = new Point(0.5, 0.5),
+                Data = Geometry.Parse(pathString.GetPathString())
+            };
+
+            return path;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

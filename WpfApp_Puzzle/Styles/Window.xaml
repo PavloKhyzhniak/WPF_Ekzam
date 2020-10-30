@@ -1,0 +1,202 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WpfApp_Puzzle.Styles"
+                    xmlns:interactivity="http://schemas.microsoft.com/expression/2010/interactivity"
+                 >
+
+    <!--<Style TargetType="Border">
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush>
+                    <GradientStop Color="Yellow" Offset="0.0" />
+                    <GradientStop Color="Red" Offset="0.5" />
+                    <GradientStop Color="Yellow" Offset="1.0" />
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="BorderBrush.(GradientBrush.GradientStops)[1].(GradientStop.Offset)"
+                                From="0" To="1" Duration="0:0:1"
+                                AutoReverse="True" RepeatBehavior="Forever"
+                                />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>-->
+
+    <ControlTemplate x:Key="buttonControlRoundTemplate" TargetType="{x:Type Button}">
+        <Grid>
+            <Ellipse x:Name="outerCircle" 
+                     Width="{TemplateBinding Button.Width}" 
+                     Height="{TemplateBinding Button.Height}"
+                     Fill="Transparent"
+                     StrokeThickness="2" Stroke="{DynamicResource linearGradientBrush}">
+
+                <Ellipse.RenderTransformOrigin>
+                    <Point X="0.5" Y="0.5"/>
+                </Ellipse.RenderTransformOrigin>
+
+                <Ellipse.RenderTransform>
+                    <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+                </Ellipse.RenderTransform>
+            </Ellipse>
+
+            <ContentPresenter
+                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+        </Grid>
+
+        <ControlTemplate.Triggers>
+
+            <Trigger Property="Button.IsMouseOver" Value="True">
+                <Setter Property="Effect" >
+                    <Setter.Value>
+                        <DropShadowEffect x:Name="shadowEffect" Opacity="1.0" BlurRadius="50" Color ="Gold"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+
+            <Trigger Property="Button.IsPressed" Value="True">
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX=".9" ScaleY=".9"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="RenderTransformOrigin" Value=".5,.5"/>
+            </Trigger>
+
+        </ControlTemplate.Triggers>
+
+    </ControlTemplate>
+    
+    <ControlTemplate x:Key="WindowControlTemplate" TargetType="{x:Type Window}">
+        <Border 
+            CornerRadius="20"
+        Background="{TemplateBinding Background}" 
+        BorderBrush="{TemplateBinding BorderBrush}" 
+        BorderThickness="{TemplateBinding BorderThickness}"
+        >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="0.93*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                  <ContentPresenter 
+                Grid.Row="1" 
+                Content="{TemplateBinding Content}" 
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                />
+                <ResizeGrip 
+                HorizontalAlignment="Right" 
+                x:Name="WindowResizeGrip" 
+                VerticalAlignment="Bottom" 
+                IsTabStop="False" 
+                Visibility="Collapsed" 
+                Grid.Row="2"
+                />
+                <Border DockPanel.Dock="Top" Width="Auto" Height="Auto">
+                    <DockPanel DockPanel.Dock="Top" Background="Transparent">
+
+                        <interactivity:Interaction.Triggers>
+                            <interactivity:EventTrigger EventName="MouseDown">
+                                <interactivity:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=Window}}"/>
+                            </interactivity:EventTrigger>
+                        </interactivity:Interaction.Triggers>
+                        
+                        <Label Content="{Binding Title,RelativeSource={RelativeSource FindAncestor,AncestorType=Window}}" HorizontalAlignment="Left" DockPanel.Dock="Left"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Height="30" DockPanel.Dock="Right">
+                            <Button Template="{DynamicResource buttonControlRoundTemplate}" Width="20" Height="20" Margin="5" Command="{Binding HideCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=Window}}" VerticalContentAlignment="Top">_</Button>
+                            <Button Template="{DynamicResource buttonControlRoundTemplate}" Width="20" Height="20" Margin="5" Command="{Binding MinimizedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=Window}}">口</Button>
+                            <Button Template="{DynamicResource buttonControlRoundTemplate}" Width="20" Height="20" Margin="5" Command="{Binding CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor,AncestorType=Window}}">X</Button>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+                <!--<StatusBar Height="20" Grid.ColumnSpan="2" Grid.Row="2"/>-->
+            </Grid>
+        </Border>
+
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="ResizeMode" Value="CanResizeWithGrip"/>
+                    <Condition Property="WindowState" Value="Normal"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Visibility" TargetName="WindowResizeGrip" Value="Visible"/>
+            </MultiTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!--<ControlTemplate x:Key="baseWindowTemplate" x:Name="baseWindowTemplate" TargetType="{x:Type Window}">
+        <Grid Background="{TemplateBinding Background}">
+            <AdornerDecorator>
+                <ContentPresenter />
+            </AdornerDecorator>
+            <ResizeGrip x:Name="WindowResizeGrip"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Bottom"
+                      Visibility="Collapsed"
+                      IsTabStop="false" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="ResizeMode"
+                   Value="CanResizeWithGrip">
+                <Setter TargetName="WindowResizeGrip"
+                    Property="Visibility"
+                    Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>-->
+    <LinearGradientBrush x:Key="linearGradientBrush" EndPoint="0.2,1.0" StartPoint="0.8,0.0">
+        <GradientStop Color="Aqua" Offset="0.8"/>
+        <GradientStop Color="Magenta" Offset="0.2"/>
+    </LinearGradientBrush>
+
+    <!--<Storyboard x:Key="NewContentStoryboard">
+        <PointAnimation Storyboard.TargetProperty="Background.(LinearGradientBrush.StartPoint)" From="0.5 0" To="0 0.5" Duration="00:00:1" />
+        <PointAnimation Storyboard.TargetProperty="Background.(LinearGradientBrush.EndPoint)" From="1 0.5" To="0 0.5" Duration="00:00:1"/>
+    </Storyboard>-->
+    
+    <Style x:Key="BaseLinearGradientWindow" x:Name="BaseLinearGradient" TargetType="{x:Type Window}">
+        <Setter Property="Template" Value="{StaticResource  WindowControlTemplate}"/>
+        <Setter Property="Background" Value="{DynamicResource linearGradientBrush}"/>
+
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="Loaded" >
+                <EventTrigger.Actions>
+                    <BeginStoryboard >
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetProperty="Background.(GradientBrush.GradientStops)[0].(GradientStop.Color)" To="Magenta" RepeatBehavior="Forever" AutoReverse="True" Duration="0:0:10" />
+                            <ColorAnimation Storyboard.TargetProperty="Background.(GradientBrush.GradientStops)[1].(GradientStop.Color)" To="Aqua" RepeatBehavior="Forever" AutoReverse="True" Duration="0:0:10" />
+                            <PointAnimation Storyboard.TargetProperty="Background.(LinearGradientBrush.StartPoint)" To="1.0 0.0" RepeatBehavior="Forever" AutoReverse="True" Duration="00:00:3" />
+                            <PointAnimation Storyboard.TargetProperty="Background.(LinearGradientBrush.EndPoint)" To="0.0 1.0" RepeatBehavior="Forever" AutoReverse="True" Duration="00:00:3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+
+            <!--<Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF2B4702" Offset="0"/>
+                            <GradientStop Color="#FFAFDE80" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>-->
+        </Style.Triggers>
+    </Style>
+
+   
+    
+</ResourceDictionary>
