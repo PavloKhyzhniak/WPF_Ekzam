@@ -66,7 +66,7 @@ namespace WpfApp_Puzzle
         }
 
         private bool SoundOnOff = true;
-        private bool MusicOnOff = false;
+        private bool MusicOnOff = true;
         MediaPlayer mp = new MediaPlayer();
         private void MusicMP3(string sound_filename, bool repeat = false)
         {
@@ -159,20 +159,26 @@ namespace WpfApp_Puzzle
 
         private void NewGame()
         {
+            uniformGridGame.Children.Clear();
+            uniformGridGamePieces.Children.Clear();
+
             OpenPicture();
             time = 0;
 
+            flag_borderShow = false;
+            BorderGridShow();
+
             //запустим безопасное перемешивание - перемешивание элементов в обратном порядке 
             ShufflePuzzle();
-
-            BorderGridShow();
 
             timer_game.Start();
             labelGameEnd.Visibility = Visibility.Hidden;
         }
 
+        bool flag_borderShow = false;
         private void BorderGridShow()
         {
+            flag_borderShow = true;
             int rows = base_rows;// uniformGridGame.Rows;
             int columns = base_columns;// uniformGridGame.Columns;
 
@@ -198,8 +204,8 @@ namespace WpfApp_Puzzle
                         Height = uniformGridGame.ActualHeight,                        
             };
 
-            Grid.SetColumnSpan(path, base_columns);
-            Grid.SetRowSpan(path, base_rows);
+            //Grid.SetColumnSpan(path, base_columns);
+            //Grid.SetRowSpan(path, base_rows);
 
             //Border border = new Border()
             //        {
@@ -273,91 +279,11 @@ namespace WpfApp_Puzzle
             }
         }
 
-        int[][] array;//массив номеров элементов на игровом поле
         string ImageFilename = "\\Resources\\yellow_breakfast.jpg";
-        int Count = 10;//установим количество перемешиваний
         int time;
 
         List<string> highscoreList { get; set; }
-
-        //работа с каждым элементом на игровом поле
-        private void element_Click(object sender, EventArgs e)
-        {
-            if (!timer_game.IsEnabled)
-                return;
-
-
-            if (sender is Button button)
-            {
-                int rows = base_rows;// uniformGridGame.Rows;
-                int columns = base_columns;// uniformGridGame.Columns;
-
-                //получение позиции
-                int current_pos = uniformGridGame.Children.IndexOf(button);
-                int current_posRow = current_pos / columns;
-                int current_posColumn = current_pos % columns;
-
-                int index = 0;
-                index = (int)(button.Tag);//получили номер элемента
-
-                int new_pos;//определим новую позицию
-
-                //проверим все элементы и найдя пустой, проверим можно ли в него переместиться
-                //помним, перемещения только по вертикали или горизонтали, диагонали запрещены
-                for (int i = 0; i < rows; i++)
-                    for (int j = 0; j < columns; j++)
-                        if (array[i][j] == 0)
-                        {
-                            //проверим достижимость позиции из исходной - текущей позиции
-                            bool flag = false;
-                            if ((current_posColumn - 1 == j) && (current_posRow == i)) flag = true;
-                            if ((current_posColumn + 1 == j) && (current_posRow == i)) flag = true;
-                            if ((current_posRow - 1 == i) && (current_posColumn == j)) flag = true;
-                            if ((current_posRow + 1 == i) && (current_posColumn == j)) flag = true;
-
-                            if (!flag)
-                                return;
-
-                            //осуществляем обмен элементов
-                            array[i][j] = index;//запишем номер элемента в новую позицию
-                            array[current_posRow][current_posColumn] = 0;//в старой позиции затираем его размещение
-                            new_pos = i * columns + j;//готовим новую позицию
-
-                            //установим новую позицию элементу
-                            if (new_pos > current_pos)
-                            {
-                                if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\leave.wav");
-
-                                uniformGridGame.Children.RemoveAt(new_pos);
-                                uniformGridGame.Children.RemoveAt(current_pos);
-                                uniformGridGame.Children.Insert(current_pos, CreateLastPiece());
-                                uniformGridGame.Children.Insert(new_pos, button);
-                            }
-                            else
-                            {
-                                if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\arrive.wav");
-
-                                uniformGridGame.Children.RemoveAt(current_pos);
-                                uniformGridGame.Children.RemoveAt(new_pos);
-                                uniformGridGame.Children.Insert(new_pos, button);
-                                uniformGridGame.Children.Insert(current_pos, CreateLastPiece());
-                            }
-
-                            //проверим размещение элементов на игровом поле - а вдруг уже победа?
-                            if (CheckCorrectBarleyBreak())
-                            {
-                                mp.Pause();
-                                if (SoundOnOff) SoundWAV(".\\..\\..\\Resources\\interlude.wav");
-
-                                MessageBox.Show("Congratulation!!!\nYour Time: " + textBlock_Time.Text);
-                                WorkWithHighScoreTable();
-                                mp.Play();
-                            }
-                            return;
-                        }
-            }
-        }
-
+               
         class playerScore
         {
             public int Pos { get; set; }
@@ -458,64 +384,46 @@ namespace WpfApp_Puzzle
 
             labelGameEnd.Visibility = Visibility.Visible;
         }
-
-        private bool CheckCorrectBarleyBreak()
-        {
-            int rows = base_rows;// uniformGridGame.Rows;
-            int columns = base_columns;// uniformGridGame.Columns;
-            int cnt = rows * columns;
-
-            //проверка корректности размещения пятнашек - номера по порядку от верхнего левого к нижнему правому игровому полю
-            for (int i = 0; i < cnt - 1; i++)
-                if (array[i / columns][i % columns] != i + 1)
-                    return false;
-
-            timer_game.Stop();
-
-            return true;
-        }
-
+                
         Random rand = new Random();
         private void ShufflePuzzle()
         {
-            uniformGridGamePieces.Children.Clear();
+            //            uniformGridGamePieces.Children.Clear();
+            while (uniformGridGamePieces.Children.Count > 0)
+            {
+                var element = uniformGridGamePieces.Children[0];
+
+                uniformGridGamePieces.Children.Remove(element);
+                uniformGridGame.Children.Add(element);
+            }
+
             int cnt = uniformGridGame.Children.Count;
 
-        //    uniformGridGamePieces.Rows = (int)Math.Sqrt(cnt) + 1;
-        //    uniformGridGamePieces.Columns = uniformGridGamePieces.Rows;
+            //    uniformGridGamePieces.Rows = (int)Math.Sqrt(cnt) + 1;
+            //    uniformGridGamePieces.Columns = uniformGridGamePieces.Rows;
 
-            while ((cnt = uniformGridGame.Children.Count) > 0)
+            int tmp_cnt = 0;
+            if (flag_borderShow)
+                tmp_cnt = 1;
+
+            while ((cnt = uniformGridGame.Children.Count) > tmp_cnt)
             {
                 var element = uniformGridGame.Children[rand.Next(cnt)];
+
+                if (element is System.Windows.Shapes.Path)
+                    continue;
 
                 uniformGridGame.Children.Remove(element);
                 uniformGridGamePieces.Children.Add(element);
 
-                Canvas.SetLeft(element, rand.Next(50, (int)uniformGridGamePieces.ActualWidth));
-                Canvas.SetTop(element, rand.Next(50, (int)uniformGridGamePieces.ActualHeight));
+                Canvas.SetLeft(element, rand.Next(50, (int)uniformGridGamePieces.ActualWidth-50));
+                Canvas.SetTop(element, rand.Next(50, (int)uniformGridGamePieces.ActualHeight-50));
             }
         }
-
-        private Button CreateLastPiece()
-        {
-            return new Button() { Visibility = Visibility.Hidden, Tag = 0 };
-        }
+                
 
         private void PrepareUniformGrid()
-        {
-            int rows = base_rows;// uniformGridGame.Rows;
-            int columns = base_columns;// uniformGridGame.Columns;
-
-            //создадим и заполним(проинициализируем) массив
-            array = new int[rows][];
-            for (int i = 0; i < rows; i++)
-            {
-                array[i] = new int[columns];
-                for (int j = 0; j < columns; j++)
-                    array[i][j] = 1 + i + i * (columns - 1) + j;
-            }
-            array[rows - 1][columns - 1] = 0;
-
+        {                          
             //очистка игрового поля перед новой игрой
             uniformGridGame.Children.Clear();
 
@@ -541,37 +449,30 @@ namespace WpfApp_Puzzle
 
             uniformGridGame.UpdateLayout();
          }
-
-        private void textBoxCountShuffle_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //считаем введенные данные - количество перемешиваний пятнашек
-            int.TryParse(textBoxCountShuffle.Text, out int res);
-            if (res != null && res > 0)
-                Count = res;//обновим значение переменной, если введенные данные корректны
-            textBoxCountShuffle.Text = Count.ToString();//отобразим обновленное значение
-        }
-
+               
         private void mainWindowBarleyBreak_Loaded(object sender, RoutedEventArgs e)
-        {
-            textBoxCountShuffle.Text = Count.ToString();
+        {           
+            MusicMP3(".\\..\\..\\Resources\\PurplePlanetMusic-Awakening(1_50)120bpm(L).mp3", true);
+            if (MusicOnOff)
+                mp.Play();
+            else
+                mp.Stop();
 
-            if (MusicOnOff) MusicMP3(".\\..\\..\\Resources\\PurplePlanetMusic-Awakening(1_50)120bpm(L).mp3", true);
-
-//            MessageBox.Show(
-//"Игра \"Пятнашки\" (7 баллов)" +
-//"\n\t1. Общие требования к играм:" +
-//"\n - наличие игрового меню" +
-//"\n - наличие статусной строки" +
-//"\n - возможность сохр / загр игры" +
-//"\n - наличие привлекательного дизайна" +
-//"\n - наличие звуков в программе" +
-//"\n - наличие нескольких окон" +
-//"\n - таблица рекордов" +
-//"\n\t2. Разработать шаблон какого - либо элемента управления с использованием " +
-//"\nтриггеров и анимации.Нужно добавить в игру(2 балла)." +
-//"\n\t3. Разработать и использовать в игре стили элементов управления, помещённые" +
-//"\nв ресурсы(2 балла)."
-//, "Экзамен по WPF");
+            MessageBox.Show(
+"Игра \"Пятнашки\" (7 баллов)" +
+"\n\t1. Общие требования к играм:" +
+"\n - наличие игрового меню" +
+"\n - наличие статусной строки" +
+"\n - возможность сохр / загр игры" +
+"\n - наличие привлекательного дизайна" +
+"\n - наличие звуков в программе" +
+"\n - наличие нескольких окон" +
+"\n - таблица рекордов" +
+"\n\t2. Разработать шаблон какого - либо элемента управления с использованием " +
+"\nтриггеров и анимации.Нужно добавить в игру(2 балла)." +
+"\n\t3. Разработать и использовать в игре стили элементов управления, помещённые" +
+"\nв ресурсы(2 балла)."
+, "Экзамен по WPF");
         }
                
         Image source;//исходная картинка
@@ -594,8 +495,8 @@ namespace WpfApp_Puzzle
         }
 
 
-        int base_rows = 4;
-        int base_columns = 4;
+        int base_rows = 5;
+        int base_columns = 5;
 
         BitmapSource bSource;
         List<PathString> list_pathstring;
@@ -607,8 +508,6 @@ namespace WpfApp_Puzzle
 
             int width = (int)uniformGridGame.ActualWidth;
             int height = (int)uniformGridGame.ActualHeight;
-
-            
             
             //исходная картинка
             bSource = new BitmapImage(new Uri(ImageFilename))
@@ -622,18 +521,8 @@ namespace WpfApp_Puzzle
 
             int width_delta = (int)bSource.PixelWidth / rows;
             int height_delta = (int)bSource.PixelHeight / columns;
-
-        //    uniformGridGame.RowDefinitions.Clear();
-        //    for (int i = 0; i < rows; i++)
-        //        uniformGridGame.RowDefinitions.Add(new RowDefinition { Height = new GridLength(height_delta*ScaleX) });
-        //
-        //    uniformGridGame.ColumnDefinitions.Clear();
-        //    for (int i = 0; i < columns; i++)
-        //        uniformGridGame.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(width_delta*ScaleY) });
-
-            
-
-                    //разобъем картинку на 15 частей(16 пустая - отсутствует)
+             
+            //разобъем картинку на 16 частей
 
                     /*
                      *  A-------B-------*-------*-------*-----
@@ -782,20 +671,10 @@ namespace WpfApp_Puzzle
                 //////////////////////////////////////////////////
 
                 //разместим фигуру на холсте, его и будем анимировать
-                Canvas new_canvas = new Canvas()
-                {
-                    RenderTransformOrigin = new Point(0.5, 0.5),
-                    Tag = i + 1,//укажем номер в стандартном расположении
-                };
-                //                new_canvas.Children.Add(CreateFigureFromPathPuzzle(new_path,bSource));
                 Image current_image = CreateImageClipToPathPuzzle(new_path, bSource);
                 //current_image.RenderTransformOrigin = new Point(0.5, 0.5);
                 current_image.Tag = i + 1;//укажем номер в стандартном расположении
-
-                //new_canvas.Children.Add(current_image);
-                //new_canvas.PreviewMouseDown += element_PreviewMouseDown;
-                //uniformGridGame.Children.Add(new_canvas);
-
+             
                 current_image.PreviewMouseDown += element_PreviewMouseDown;
                 uniformGridGame.Children.Add(current_image);
                 Canvas.SetLeft(current_image, 0);
@@ -950,25 +829,25 @@ namespace WpfApp_Puzzle
 
         private void LoadLastState(string filename)
         {
-            // Инициализация хранилища резервных копий
-            MementoBackUp memory = new MementoBackUp();
-            Object_BarleyBreak last_state = new Object_BarleyBreak();
+            //// Инициализация хранилища резервных копий
+            //MementoBackUp memory = new MementoBackUp();
+            //Object_BarleyBreak last_state = new Object_BarleyBreak();
 
-            last_state.ID = (last_state.ID.Item1, last_state.ID.Item2, 1);
+            //last_state.ID = (last_state.ID.Item1, last_state.ID.Item2, 1);
 
-            //если словарь уже создавался, загрузим его
-            FileInfo info;
-            info = new FileInfo(filename);
-            if (info.Exists)
-            {
-                memory = XML.Load(filename);
-            }
+            ////если словарь уже создавался, загрузим его
+            //FileInfo info;
+            //info = new FileInfo(filename);
+            //if (info.Exists)
+            //{
+            //    memory = XML.Load(filename);
+            //}
 
-            // Восстановление данных основного объекта из резервной копии
-            last_state.Get(memory[last_state.ID]);
+            //// Восстановление данных основного объекта из резервной копии
+            //last_state.Get(memory[last_state.ID]);
 
-            // Восстановление состояния программы
-            RecoveryBarleyBreakState(last_state);
+            //// Восстановление состояния программы
+            //RecoveryBarleyBreakState(last_state);
         }
 
         private void SaveLastState(string filename)
@@ -1236,11 +1115,10 @@ namespace WpfApp_Puzzle
                 }
 
 
-                if (res1 != null)
-                    uniformGridGame.ReleaseMouseCapture();
-                else if (res2 != null)
-                    uniformGridGamePieces.ReleaseMouseCapture();
-
+            //    if (res1 != null)
+            //        uniformGridGame.ReleaseMouseCapture();
+            //    else if (res2 != null)
+            //        uniformGridGamePieces.ReleaseMouseCapture();
 
                 uniformGridGame.ReleaseMouseCapture();
                 uniformGridGamePieces.ReleaseMouseCapture();
@@ -1286,16 +1164,16 @@ namespace WpfApp_Puzzle
             foreach (var path in list_pathstring)
             {
                 Point currentCenter = new Point(path.Center.X * ScaleX, path.Center.Y * ScaleY);
-                foreach(var element in uniformGridGame.Children)
+                foreach (var element in uniformGridGame.Children)
                 {
-                    if(element is Image image)
+                    if (element is Image image)
                     {
                         double posX = Canvas.GetLeft(image);
                         double posY = Canvas.GetTop(image);
 
                         int current_index = (int)image.Tag;
                         if (posX == currentCenter.X && posY == currentCenter.Y
-                            && index==current_index)
+                            && index == current_index)
                             cnt++;
                     }
                 }
@@ -1303,7 +1181,11 @@ namespace WpfApp_Puzzle
             }
 
             if (cnt == (base_columns * base_rows))
-                MessageBox.Show("Your are Winner!!!","End Game");
+            {
+                MessageBox.Show("Your are Winner!!!", "End Game");
+                timer_game.Stop();
+                labelGameEnd.Visibility = Visibility.Visible;
+            }
         }
 
 

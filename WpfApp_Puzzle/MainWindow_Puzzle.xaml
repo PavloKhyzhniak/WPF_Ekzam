@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp_Puzzle"
         mc:Ignorable="d"
-        Title="Barley Break"
+        Title="Puzzle"
         Height="600" MinHeight="550"
         Width="450" MinWidth="900"
         x:Name="mainWindowBarleyBreak" 
@@ -67,8 +67,6 @@
                 <Button Width="100" Margin="10,3,3,3" Click="ButtonNewGame_Click">New Game</Button>
                 <Separator Width="100"/>
                 <Button Width="100" Margin="3" Click="ButtonShuffle_Click">Safe Shuffle</Button>
-                <Label VerticalContentAlignment="Center">Count:</Label>
-                <TextBox Background="Transparent" HorizontalContentAlignment="Center" BorderThickness="0,0,0,1" Name="textBoxCountShuffle" Width="40" Margin="3" TextChanged="textBoxCountShuffle_TextChanged" VerticalContentAlignment="Center">10</TextBox>
             </StackPanel>
             <Grid >
                 <Grid.ColumnDefinitions>
