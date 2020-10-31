@@ -8,12 +8,12 @@
         Title="Puzzle"
         Height="600" MinHeight="550"
         Width="450" MinWidth="900"
-        x:Name="mainWindowBarleyBreak" 
-        Loaded="mainWindowBarleyBreak_Loaded"
+        x:Name="mainWindowPuzzle" 
+        Loaded="mainWindowPuzzle_Loaded"
         Style="{DynamicResource BaseLinearGradientWindow}" 
         WindowStyle="None" FontFamily="Segoe Script" FontSize="14" AllowsTransparency="True" 
-        Unloaded="mainWindowBarleyBreak_Unloaded" 
-        PreviewMouseWheel="mainWindowBarleyBreak_PreviewMouseWheel" SizeChanged="mainWindowBarleyBreak_SizeChanged"
+        Unloaded="mainWindowPuzzle_Unloaded" 
+        PreviewMouseWheel="mainWindowPuzzle_PreviewMouseWheel" SizeChanged="mainWindowPuzzle_SizeChanged"
         
         >
 
@@ -65,6 +65,25 @@
         <StackPanel Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal">
                 <Button Width="100" Margin="10,3,3,3" Click="ButtonNewGame_Click">New Game</Button>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel>
+                        <Label HorizontalContentAlignment="Center">Rows</Label>
+                        <TextBox Text="{Binding base_rows}" 
+                                 BorderThickness="0"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                         FontSize="18" x:Name="textBox_Rows" Width="50" Background="Transparent" TextChanged="textBox_Rows_TextChanged"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <Label HorizontalContentAlignment="Center">x</Label>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label HorizontalContentAlignment="Center">Columns</Label>
+                        <TextBox Text="{Binding base_columns}" 
+                                 BorderThickness="0"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                         FontSize="18" x:Name="textBox_Columns" Width="50" Background="Transparent" TextChanged="textBox_Columns_TextChanged"/>
+                    </StackPanel>
+                </StackPanel>
                 <Separator Width="100"/>
                 <Button Width="100" Margin="3" Click="ButtonShuffle_Click">Safe Shuffle</Button>
             </StackPanel>
@@ -96,8 +115,7 @@
         </StackPanel>
         <Border x:Name="borderGame" BorderThickness="1" BorderBrush="AliceBlue" 
                 Margin="10" Grid.Row="1" Grid.Column="0" ClipToBounds="True" 
-                Width="{Binding ElementName=uniformGridGame, Path=Width,Mode=TwoWay}"
-                Height="{Binding ElementName=uniformGridGame, Path=Height, Mode=TwoWay}"
+              
                
                 >
             <Canvas 

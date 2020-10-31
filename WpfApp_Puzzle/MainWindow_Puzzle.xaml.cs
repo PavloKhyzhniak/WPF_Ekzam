@@ -191,7 +191,7 @@ namespace WpfApp_Puzzle
                 {
                     str.Append(" " + list_pathstring[i * columns + j].GetPathString());
                 }
-            ScaleTransform scale = new ScaleTransform();
+            ScaleTransform scale = new ScaleTransform(ScaleX,ScaleY);
             System.Windows.Shapes.Path path = new System.Windows.Shapes.Path()
                     {
                         Stroke = Brushes.Red,
@@ -217,14 +217,14 @@ namespace WpfApp_Puzzle
             //            Height = uniformGridGame.ActualHeight
             //        };
 
-                    Binding scaleX;
-                    Binding scaleY;
-
-                    scaleX = new Binding("ScaleX") { Source = this, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
-                    BindingOperations.SetBinding(scale, ScaleTransform.ScaleXProperty, scaleX);
-
-                    scaleY = new Binding("ScaleY") { Source = this, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
-                    BindingOperations.SetBinding(scale, ScaleTransform.ScaleYProperty, scaleY);
+        //            Binding scaleX;
+        //            Binding scaleY;
+        //
+        //            scaleX = new Binding("ScaleX") { Source = this, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+        //            BindingOperations.SetBinding(scale, ScaleTransform.ScaleXProperty, scaleX);
+        //
+        //            scaleY = new Binding("ScaleY") { Source = this, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
+        //            BindingOperations.SetBinding(scale, ScaleTransform.ScaleYProperty, scaleY);
 
                     uniformGridGame.Children.Add(path);
             //                    Grid.SetZIndex(border, 1000);
@@ -233,7 +233,7 @@ namespace WpfApp_Puzzle
 
             uniformGridGame.UpdateLayout();
             path.Width = path.ActualWidth;
-            path.Width = path.ActualWidth;
+            path.Height = path.ActualHeight;
             path.UpdateLayout();
         }
 
@@ -436,7 +436,7 @@ namespace WpfApp_Puzzle
 
             Binding bndWidth;
             Binding bndHeight;
-            if (mainWindowBarleyBreak.ActualWidth > mainWindowBarleyBreak.ActualHeight)
+            if (mainWindowPuzzle.ActualWidth > mainWindowPuzzle.ActualHeight)
                 bndWidth = new Binding("Height") { ElementName = "borderGame" };
             //uniformGridGame.Width = mainWindowBarleyBreak.ActualHeight -100;
             else
@@ -444,18 +444,18 @@ namespace WpfApp_Puzzle
             //uniformGridGame.Width = mainWindowBarleyBreak.ActualWidth -100;
 
             //BindingOperations.ClearAllBindings(uniformGridGame);
-            BindingOperations.ClearBinding(uniformGridGame, UniformGrid.WidthProperty);
-            BindingOperations.SetBinding(uniformGridGame, UniformGrid.WidthProperty, bndWidth);
+            BindingOperations.ClearBinding(uniformGridGame, Canvas.WidthProperty);
+            BindingOperations.SetBinding(uniformGridGame, Canvas.WidthProperty, bndWidth);
 
             bndHeight = new Binding("ActualWidth") { ElementName = "uniformGridGame" };
-            BindingOperations.ClearBinding(uniformGridGame, UniformGrid.HeightProperty);
-            BindingOperations.SetBinding(uniformGridGame, UniformGrid.HeightProperty, bndHeight);
+            BindingOperations.ClearBinding(uniformGridGame, Canvas.HeightProperty);
+            BindingOperations.SetBinding(uniformGridGame, Canvas.HeightProperty, bndHeight);
             //uniformGridGame.Height = uniformGridGame.Width;
 
             uniformGridGame.UpdateLayout();
          }
                
-        private void mainWindowBarleyBreak_Loaded(object sender, RoutedEventArgs e)
+        private void mainWindowPuzzle_Loaded(object sender, RoutedEventArgs e)
         {           
             MusicMP3(".\\..\\..\\Resources\\PurplePlanetMusic-Awakening(1_50)120bpm(L).mp3", true);
             if (MusicOnOff)
@@ -478,10 +478,8 @@ namespace WpfApp_Puzzle
 "\n\t3. Разработать и использовать в игре стили элементов управления, помещённые" +
 "\nв ресурсы(2 балла)."
 , "Экзамен по WPF");
-        }
-               
-        Image source;//исходная картинка
-       
+        }   
+        
         class PathString
         {
             public string Top { get; set; }
@@ -500,8 +498,8 @@ namespace WpfApp_Puzzle
         }
 
 
-        int base_rows = 5;
-        int base_columns = 5;
+        public int base_rows { get; set; } = 5;
+        public int base_columns { get; set; } = 5;
 
         BitmapSource bSource;
         List<PathString> list_pathstring;
@@ -526,8 +524,8 @@ namespace WpfApp_Puzzle
 
             //            int width_delta = (int)bSource.PixelWidth / rows;
             //            int height_delta = (int)bSource.PixelHeight / columns;
-            int width_delta = (int)bSource.Width / rows;
-            int height_delta = (int)bSource.Height / columns;
+            int width_delta = (int)bSource.Width / columns;
+            int height_delta = (int)bSource.Height / rows;
 
             //разобъем картинку на 16 частей
 
@@ -766,7 +764,7 @@ namespace WpfApp_Puzzle
 
         private Image CreateImageClipToPathPuzzle(PathString pathString, BitmapSource bSource)
         {
-            ScaleTransform scale = new ScaleTransform();
+            ScaleTransform scale = new ScaleTransform(ScaleX,ScaleY);
             TranslateTransform translate = new TranslateTransform(-pathString.Center.X, -pathString.Center.Y);
             TransformGroup group = new TransformGroup();
             group.Children.Add(translate);
@@ -781,14 +779,14 @@ namespace WpfApp_Puzzle
                 RenderTransform = group//scale
             };
 
-            Binding scaleX;
-            Binding scaleY;
-
-            scaleX = new Binding("ScaleX") { Source = this, Mode = BindingMode.TwoWay,UpdateSourceTrigger=UpdateSourceTrigger.PropertyChanged };
-            BindingOperations.SetBinding(scale, ScaleTransform.ScaleXProperty, scaleX);
-
-            scaleY = new Binding("ScaleY") { Source = this, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged };
-            BindingOperations.SetBinding(scale, ScaleTransform.ScaleYProperty, scaleY);
+        //    Binding scaleX;
+        //    Binding scaleY;
+        //
+        //    scaleX = new Binding("ScaleX") { Source = this, Mode = BindingMode.TwoWay,UpdateSourceTrigger=UpdateSourceTrigger.Explicit };
+        //    BindingOperations.SetBinding(scale, ScaleTransform.ScaleXProperty, scaleX);
+        //
+        //    scaleY = new Binding("ScaleY") { Source = this, Mode = BindingMode.TwoWay, UpdateSourceTrigger = UpdateSourceTrigger.Explicit };
+        //    BindingOperations.SetBinding(scale, ScaleTransform.ScaleYProperty, scaleY);
 
             return new_image;
         }
@@ -824,12 +822,12 @@ namespace WpfApp_Puzzle
         //    SaveLastState(".\\last_state.xml");
         }
 
-        private void mainWindowBarleyBreak_Unloaded(object sender, RoutedEventArgs e)
+        private void mainWindowPuzzle_Unloaded(object sender, RoutedEventArgs e)
         {
             mp.Close();
         }
 
-        private void mainWindowBarleyBreak_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void mainWindowPuzzle_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             mp.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
@@ -924,9 +922,9 @@ namespace WpfApp_Puzzle
             //time = last_state.time;
         }
 
-        private void mainWindowBarleyBreak_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void mainWindowPuzzle_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            RecalculatedScale();
+            RecalculatedScale();            
         }
 
         private void RecalculatedScale()
@@ -935,6 +933,32 @@ namespace WpfApp_Puzzle
             {
                 ScaleX = uniformGridGame.ActualWidth / bSource.Width;
                 ScaleY = uniformGridGame.ActualHeight / bSource.Height;
+
+                uniformGridGame.UpdateLayout();
+                foreach (var item in uniformGridGame.Children)
+                    if (item is Image image)
+                    {
+                        if (image.RenderTransform is TransformGroup group)
+                        {
+                            group.Children[1].SetCurrentValue(ScaleTransform.ScaleXProperty, ScaleX);
+                            group.Children[1].SetCurrentValue(ScaleTransform.ScaleYProperty, ScaleY);
+                        }
+                    }
+                    else if (item is System.Windows.Shapes.Path path)
+                    {
+                        path.RenderTransform.SetCurrentValue(ScaleTransform.ScaleXProperty, ScaleX);
+                        path.RenderTransform.SetCurrentValue(ScaleTransform.ScaleYProperty, ScaleY);
+                    }
+                foreach (var item in uniformGridGamePieces.Children)
+                    if (item is Image image)
+                    {
+                        if (image.RenderTransform is TransformGroup group)
+                        {
+                            group.Children[1].SetCurrentValue(ScaleTransform.ScaleXProperty, ScaleX);
+                            group.Children[1].SetCurrentValue(ScaleTransform.ScaleYProperty, ScaleY);
+                        }
+                    }
+
             }
         }
 
@@ -1238,6 +1262,24 @@ namespace WpfApp_Puzzle
             }
         }
 
-     
+        private void textBox_Rows_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //считаем введенные данные - количество перемешиваний пятнашек
+            int.TryParse(textBox_Rows.Text, out int res);
+            if (res >= 4)
+                base_rows = res;//обновим значение переменной, если введенные данные корректны
+            textBox_Rows.Text = base_rows.ToString();//отобразим обновленное значение
+
+        }
+
+        private void textBox_Columns_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //считаем введенные данные - количество перемешиваний пятнашек
+            int.TryParse(textBox_Columns.Text, out int res);
+            if (res >= 4)
+                base_columns = res;//обновим значение переменной, если введенные данные корректны
+            textBox_Columns.Text = base_columns.ToString();//отобразим обновленное значение
+
+        }
     }
 }
