@@ -248,8 +248,8 @@ namespace WpfApp_BarleyBreak
 
             if (sender is Button button)
             {
-                int rows = uniformGridGame.Rows;
-                int columns = uniformGridGame.Columns;
+                int rows = base_rows;// uniformGridGame.Rows;
+                int columns = base_columns;// uniformGridGame.Columns;
 
                 //получение позиции
                 int current_pos = uniformGridGame.Children.IndexOf(button);
@@ -420,8 +420,8 @@ namespace WpfApp_BarleyBreak
 
         private bool CheckCorrectBarleyBreak()
         {
-            int rows = uniformGridGame.Rows;
-            int columns = uniformGridGame.Columns;
+            int rows = base_rows;// uniformGridGame.Rows;
+            int columns = base_columns;// uniformGridGame.Columns;
             int cnt = rows * columns;
 
             //проверка корректности размещения пятнашек - номера по порядку от верхнего левого к нижнему правому игровому полю
@@ -436,13 +436,13 @@ namespace WpfApp_BarleyBreak
 
         private void ShuffleSafe_Barley_Break(int count)
         {
-            int cnt = uniformGridGame.Rows * uniformGridGame.Columns;
+            int rows = base_rows;// uniformGridGame.Rows;
+            int columns = base_columns;// uniformGridGame.Columns;
+            int cnt = rows * columns;
             if (uniformGridGame.Children.Count != cnt)
                 return;
 
-            int rows = uniformGridGame.Rows;
-            int columns = uniformGridGame.Columns;
-
+        
             Random rand = new Random();
             for (int k = 0; k < count; k++)
             {
@@ -505,8 +505,11 @@ namespace WpfApp_BarleyBreak
 
         private void PrepareUniformGrid()
         {
-            int rows = uniformGridGame.Rows;
-            int columns = uniformGridGame.Columns;
+            int rows = base_rows;// uniformGridGame.Rows;
+            int columns = base_columns;// uniformGridGame.Columns;
+
+            uniformGridGame.Rows = base_rows;
+            uniformGridGame.Columns = base_columns;
 
             //создадим и заполним(проинициализируем) массив
             array = new int[rows][];
@@ -586,8 +589,8 @@ namespace WpfApp_BarleyBreak
 
         private void PrepareButtonNummer()
         {
-            int rows = uniformGridGame.Rows;
-            int columns = uniformGridGame.Columns;
+            int rows = base_rows;// uniformGridGame.Rows;
+            int columns = base_columns;// uniformGridGame.Columns;
             int cnt = rows * columns;
 
             Button button;
@@ -603,8 +606,8 @@ namespace WpfApp_BarleyBreak
         Image source;//исходная картинка
         private void PrepareButtonImage()
         {
-            int rows = uniformGridGame.Rows;
-            int columns = uniformGridGame.Columns;
+            int rows = base_rows;// uniformGridGame.Rows;
+            int columns = base_columns;// uniformGridGame.Columns;
             int cnt = rows * columns;
 
             int width = (int)uniformGridGame.ActualWidth;
@@ -663,8 +666,8 @@ namespace WpfApp_BarleyBreak
         List<PathString> list_pathstring;
         private void PrepareCanvasImagePuzzle()
         {
-            int rows = uniformGridGame.Rows;
-            int columns = uniformGridGame.Columns;
+            int rows = base_rows;// uniformGridGame.Rows;
+            int columns = base_columns;// uniformGridGame.Columns;
             int cnt = rows * columns;
 
             int width = (int)uniformGridGame.ActualWidth;
@@ -1017,6 +1020,9 @@ namespace WpfApp_BarleyBreak
             int columns = uniformGridGame.Columns;
             int cnt = rows * columns;
 
+            base_rows = rows;
+            base_columns = columns;
+
             for(int i=0;i<cnt;i++)
             {
                 int index = last_state.array[i / columns][i % columns];
@@ -1038,6 +1044,30 @@ namespace WpfApp_BarleyBreak
             labelGameEnd.Visibility = Visibility.Hidden;
             //установим время на момент сохранения сотояния
             time = last_state.time;
+        }
+
+        public int base_rows { get; set; } = 4;
+        public int base_columns { get; set; } = 4;
+
+
+        private void textBox_Rows_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //считаем введенные данные - количество перемешиваний пятнашек
+            int.TryParse(textBox_Rows.Text, out int res);
+            if (res >= 4)
+                base_rows = res;//обновим значение переменной, если введенные данные корректны
+            textBox_Rows.Text = base_rows.ToString();//отобразим обновленное значение
+
+        }
+
+        private void textBox_Columns_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //считаем введенные данные - количество перемешиваний пятнашек
+            int.TryParse(textBox_Columns.Text, out int res);
+            if (res >= 4)
+                base_columns = res;//обновим значение переменной, если введенные данные корректны
+            textBox_Columns.Text = base_columns.ToString();//отобразим обновленное значение
+
         }
     }
 }

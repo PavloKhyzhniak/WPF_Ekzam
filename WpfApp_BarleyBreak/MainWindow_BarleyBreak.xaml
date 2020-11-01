@@ -50,6 +50,25 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Button Width="100" Margin="10,3,3,3" Click="ButtonNewGame_Click">New Game</Button>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel>
+                        <Label HorizontalContentAlignment="Center">Rows</Label>
+                        <TextBox Text="{Binding base_rows}" 
+                                 BorderThickness="0"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+                         FontSize="18" x:Name="textBox_Rows" Width="50" Background="Transparent" TextChanged="textBox_Rows_TextChanged"/>
+                    </StackPanel>
+                    <StackPanel VerticalAlignment="Bottom">
+                        <Label HorizontalContentAlignment="Center">x</Label>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label HorizontalContentAlignment="Center">Columns</Label>
+                        <TextBox Text="{Binding base_columns}" 
+                                 BorderThickness="0"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                         FontSize="18" x:Name="textBox_Columns" Width="50" Background="Transparent" TextChanged="textBox_Columns_TextChanged"/>
+                    </StackPanel>
+                </StackPanel>
                 <CheckBox Background="Transparent" x:Name="checkBoxPicture" Width="100" Margin="3" VerticalAlignment="Center" Checked="checkBoxPicture_Checked" Unchecked="checkBoxPicture_Unchecked">Use Picture</CheckBox>
                 <Button Width="100" Margin="3" Click="ButtonShuffle_Click">Safe Shuffle</Button>
                 <Label VerticalContentAlignment="Center">Count:</Label>
@@ -83,14 +102,12 @@
         </StackPanel>
         <Border x:Name="borderGame" BorderThickness="1" BorderBrush="AliceBlue" 
                 Margin="10" Grid.Row="1" ClipToBounds="True" 
-                Width="{Binding ElementName=uniformGridGame, Path=Width,Mode=TwoWay}"
-                Height="{Binding ElementName=uniformGridGame, Path=Height, Mode=TwoWay}"
-               
+                  
                 >
             <UniformGrid 
                 Name="uniformGridGame" 
                 Grid.Row="1" 
-                Columns="4" Rows="4" 
+                Columns="{Binding base_columns}" Rows="{Binding base_rows}" 
                 ClipToBounds="True" 
                 ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                 >
